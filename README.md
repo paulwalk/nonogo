@@ -9,5 +9,11 @@ Each puzzle file is a YAML file which contains the puzzle definition. The requir
 Compile the code, and then run the executable, pointing it to a puzzle file.  See the `data` directory for examples.
 
 ```bash
-nonogo --puzzle=./data/candle.nonogram.yaml --debug=true|false
+nonogo --puzzle=./data/burning.nonogram.yaml --debug=true|false
 ```
+
+
+
+## Screenshot
+
+![screenshot](./screenshot.png)

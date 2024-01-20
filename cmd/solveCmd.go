@@ -26,8 +26,13 @@ func solve() {
 	iterations := Solver.Solve()
 	elapsedTime := time.Since(start)
 	fmt.Print(Puzzle.Dump())
-	log.Info(fmt.Sprintf("Unsolved lines = %v out of %v", len(Solver.Heap.Lines), Puzzle.ColCount+Puzzle.RowCount))
+	unsolvedLines := len(Solver.Heap.Lines)
+	log.Info(fmt.Sprintf("Unsolved lines = %v out of %v", unsolvedLines, Puzzle.ColCount+Puzzle.RowCount))
 	log.Info(fmt.Sprintf("Iterations = %v", iterations))
 	log.Info(fmt.Sprintf("Execution took %s", elapsedTime))
-	log.Info("Solve completed")
+	if unsolvedLines > 0 {
+		log.Info("Failed to solve puzzle")
+	} else {
+		log.Info("Puzzle solved!")
+	}
 }
