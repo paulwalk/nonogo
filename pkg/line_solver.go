@@ -11,7 +11,7 @@ func solveLine(line *Line) bool {
 }
 
 func findCellsWhichAreSameInAllPotentialSolutions(line *Line) bool {
-	//log.Debug("Finding cells which are blocks/spaces in all potential solutions....")
+	log.Debug("Finding cells which are blocks/spaces in all potential solutions....")
 	progressWasMade := false
 	for cellIndex, cell := range line.Cells() {
 		if *cell == UNKNOWN {
@@ -44,7 +44,7 @@ func findCellsWhichAreSameInAllPotentialSolutions(line *Line) bool {
 }
 
 func removeSolutionsWhichDoNotFitKnownCells(line *Line) bool {
-	//log.Debug("Finding solutions which do not fit known cells....")
+	log.Debug("Finding solutions which do not fit known cells....")
 	progressWasMade := false
 	for cellIndex, cell := range line.Cells() {
 		if *cell != UNKNOWN {
