@@ -30,16 +30,17 @@ func NewPuzzle(filePath string) (Puzzle, error) {
 	if err != nil {
 		return puzzle, err
 	}
-	err = yaml.Unmarshal([]byte(puzzleData), &puzzle)
-	if err == nil {
-		puzzle.RowCount = len(puzzle.RowClueData)
-		puzzle.ColCount = len(puzzle.ColClueData)
-		puzzle.Grid = make([][]int, puzzle.RowCount)
-		for x := 0; x < puzzle.RowCount; x++ {
-			puzzle.Grid[x] = make([]int, puzzle.ColCount)
-			for y := 0; y < puzzle.ColCount; y++ {
-				puzzle.Grid[x][y] = UNKNOWN
-			}
+	err = yaml.Unmarshal(puzzleData, &puzzle)
+	if err != nil {
+		return puzzle, err
+	}
+	puzzle.RowCount = len(puzzle.RowClueData)
+	puzzle.ColCount = len(puzzle.ColClueData)
+	puzzle.Grid = make([][]int, puzzle.RowCount)
+	for x := 0; x < puzzle.RowCount; x++ {
+		puzzle.Grid[x] = make([]int, puzzle.ColCount)
+		for y := 0; y < puzzle.ColCount; y++ {
+			puzzle.Grid[x][y] = UNKNOWN
 		}
 	}
 	largestColClueNum := 0
