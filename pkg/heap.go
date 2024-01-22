@@ -5,21 +5,20 @@ import "sort"
 type LineHeap struct {
 	Lines      map[string]*Line
 	LineLabels []string
+	Puzzle     *Puzzle
 }
 
-func (heap *LineHeap) hasLinesToSolve() bool {
-	return len(heap.Lines) > 0
-}
-
-func (heap *LineHeap) Initialise() {
+func NewLineHeap(puzzle *Puzzle) LineHeap {
+	heap := LineHeap{}
+	heap.Puzzle = puzzle
 	heap.Lines = make(map[string]*Line)
-	log.Debugf("Puzzle rows - %v", Puzzle.RowCount)
-	for i := 0; i < Puzzle.RowCount; i++ {
-		line := NewLine(ROW, i)
+	log.Debugf("Puzzle rows - %v", puzzle.RowCount)
+	for i := 0; i < puzzle.RowCount; i++ {
+		line := NewLine(puzzle, ROW, i)
 		heap.Lines[line.Label()] = line
 	}
-	for i := 0; i < Puzzle.ColCount; i++ {
-		line := NewLine(COL, i)
+	for i := 0; i < puzzle.ColCount; i++ {
+		line := NewLine(puzzle, COL, i)
 		heap.Lines[line.Label()] = line
 	}
 	heap.LineLabels = make([]string, 0, len(heap.Lines))
@@ -32,6 +31,11 @@ func (heap *LineHeap) Initialise() {
 			return sortLineLabel(heap.LineLabels[i]) < sortLineLabel(heap.LineLabels[j])
 		},
 	)
+	return heap
+}
+
+func (heap *LineHeap) hasLinesToSolve() bool {
+	return len(heap.Lines) > 0
 }
 
 func (heap *LineHeap) removeLine(line *Line) {

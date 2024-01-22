@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func displayCell(cellValue int) string {
+func displayCell(cellValue, displayPadding int) string {
 	var displayCharacter string
 	switch cellValue {
 	case SPACE:
@@ -19,13 +19,13 @@ func displayCell(cellValue int) string {
 		displayCharacter = " "
 	}
 	//return fmt.Sprintf("%*v", Puzzle.DisplayPadding, displayCharacter)
-	return color.BlueString("%*v", Puzzle.DisplayPadding, displayCharacter)
+	return color.BlueString("%*v", displayPadding, displayCharacter)
 }
 
 func displayLine(line *Line, displayClues bool) string {
 	lineString := ""
 	for _, cell := range line.Cells() {
-		lineString += displayCell(*cell)
+		lineString += displayCell(*cell, line.Puzzle.DisplayPadding)
 	}
 	if displayClues {
 		clueString := make([]string, 0)

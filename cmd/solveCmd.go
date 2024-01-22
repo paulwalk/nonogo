@@ -18,16 +18,15 @@ var solveCmd = &cobra.Command{
 func solve() {
 	start := time.Now()
 	log.Info("Solve starting...")
-	var Solver = PuzzleSolver{}
-	err := Solver.Initialise(puzzleFilePath, log)
+	puzzleSolver, err := NewPuzzleSolver(puzzleFilePath, log)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	iterations := Solver.Solve()
+	iterations := puzzleSolver.Solve()
 	elapsedTime := time.Since(start)
-	fmt.Print(Puzzle.Dump())
-	unsolvedLines := len(Solver.Heap.Lines)
-	log.Info(fmt.Sprintf("Unsolved lines = %v out of %v", unsolvedLines, Puzzle.ColCount+Puzzle.RowCount))
+	fmt.Print(puzzleSolver.Puzzle.Dump())
+	unsolvedLines := len(puzzleSolver.Heap.Lines)
+	log.Info(fmt.Sprintf("Unsolved lines = %v out of %v", unsolvedLines, puzzleSolver.Puzzle.ColCount+puzzleSolver.Puzzle.RowCount))
 	log.Info(fmt.Sprintf("Iterations = %v", iterations))
 	log.Info(fmt.Sprintf("Execution took %s", elapsedTime))
 	if unsolvedLines > 0 {

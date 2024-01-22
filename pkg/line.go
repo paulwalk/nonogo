@@ -10,16 +10,18 @@ const COL = int(1)
 type Line struct {
 	Axis, Index, Length int
 	PotentialSolutions  [][]int
+	Puzzle              *Puzzle
 }
 
-func NewLine(axis, index int) *Line {
+func NewLine(puzzle *Puzzle, axis, index int) *Line {
 	line := Line{}
 	line.Axis = axis
 	line.Index = index
+	line.Puzzle = puzzle
 	if axis == ROW {
-		line.Length = Puzzle.ColCount
+		line.Length = puzzle.ColCount
 	} else {
-		line.Length = Puzzle.RowCount
+		line.Length = puzzle.RowCount
 	}
 	line.PotentialSolutions = populatePotentialSolutions(line.Clue(), line.Length)
 	return &line
@@ -37,13 +39,13 @@ func (line *Line) Cells() []*int {
 	var cells []*int
 	if line.Axis == ROW {
 		cells = make([]*int, 0)
-		for i := 0; i < Puzzle.ColCount; i++ {
-			cells = append(cells, &Puzzle.Grid[line.Index][i])
+		for i := 0; i < line.Puzzle.ColCount; i++ {
+			cells = append(cells, &line.Puzzle.Grid[line.Index][i])
 		}
 	} else {
 		cells = make([]*int, 0)
-		for i := 0; i < Puzzle.RowCount; i++ {
-			cells = append(cells, &Puzzle.Grid[i][line.Index])
+		for i := 0; i < line.Puzzle.RowCount; i++ {
+			cells = append(cells, &line.Puzzle.Grid[i][line.Index])
 		}
 	}
 	return cells
@@ -51,9 +53,9 @@ func (line *Line) Cells() []*int {
 
 func (line *Line) Clue() []int {
 	if line.Axis == ROW {
-		return Puzzle.RowClueData[line.Index]
+		return line.Puzzle.RowClueData[line.Index]
 	} else {
-		return Puzzle.ColClueData[line.Index]
+		return line.Puzzle.ColClueData[line.Index]
 	}
 }
 
@@ -116,7 +118,7 @@ func (line *Line) dumpPotentialSolutions() string {
 	outputLine := ""
 	for _, solution := range line.PotentialSolutions {
 		for _, cell := range solution {
-			outputLine += displayCell(cell)
+			outputLine += displayCell(cell, line.Puzzle.DisplayPadding)
 		}
 		outputLine += "\n"
 	}

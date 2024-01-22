@@ -6,24 +6,24 @@ import (
 )
 
 type PuzzleSolver struct {
-	Heap LineHeap
+	Heap   LineHeap
+	Puzzle *Puzzle
 }
 
 var log *zap.SugaredLogger
-var Puzzle PuzzleStruct
 
-func (puzzleSolver *PuzzleSolver) Initialise(puzzleFilePath string, logger *zap.SugaredLogger) error {
+func NewPuzzleSolver(puzzleFilePath string, logger *zap.SugaredLogger) (PuzzleSolver, error) {
 	var err error
 	log = logger
-	Puzzle = PuzzleStruct{}
-	err = Puzzle.Initialise(puzzleFilePath)
+	puzzleSolver := PuzzleSolver{}
+	puzzle, err := NewPuzzle(puzzleFilePath)
 	if err != nil {
 		log.Error(err.Error())
-		return err
+		return puzzleSolver, err
 	}
-	puzzleSolver.Heap = LineHeap{}
-	puzzleSolver.Heap.Initialise()
-	return err
+	puzzleSolver.Puzzle = &puzzle
+	puzzleSolver.Heap = NewLineHeap(&puzzle)
+	return puzzleSolver, err
 }
 
 func (puzzleSolver *PuzzleSolver) Solve() int {

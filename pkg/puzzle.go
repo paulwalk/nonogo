@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"gopkg.in/yaml.v3"
-	"io/ioutil"
+	"os"
 	"strconv"
 )
 
@@ -12,7 +12,7 @@ const UNKNOWN = int(0)
 const SPACE = int(1)
 const BLOCK = int(2)
 
-type PuzzleStruct struct {
+type Puzzle struct {
 	Title          string  `yaml:"title"`
 	Author         string  `yaml:"author"`
 	RowClueData    [][]int `yaml:"rows"`
@@ -23,20 +23,22 @@ type PuzzleStruct struct {
 	DisplayPadding int
 }
 
-func (puzzle *PuzzleStruct) Initialise(filePath string) error {
+func NewPuzzle(filePath string) (Puzzle, error) {
 	var err error
-	puzzleData, err := ioutil.ReadFile(filePath)
+	puzzle := Puzzle{}
+	puzzleData, err := os.ReadFile(filePath)
+	if err != nil {
+		return puzzle, err
+	}
+	err = yaml.Unmarshal([]byte(puzzleData), &puzzle)
 	if err == nil {
-		err = yaml.Unmarshal([]byte(puzzleData), &puzzle)
-		if err == nil {
-			puzzle.RowCount = len(puzzle.RowClueData)
-			puzzle.ColCount = len(puzzle.ColClueData)
-			puzzle.Grid = make([][]int, puzzle.RowCount)
-			for x := 0; x < puzzle.RowCount; x++ {
-				puzzle.Grid[x] = make([]int, puzzle.ColCount)
-				for y := 0; y < puzzle.ColCount; y++ {
-					puzzle.Grid[x][y] = UNKNOWN
-				}
+		puzzle.RowCount = len(puzzle.RowClueData)
+		puzzle.ColCount = len(puzzle.ColClueData)
+		puzzle.Grid = make([][]int, puzzle.RowCount)
+		for x := 0; x < puzzle.RowCount; x++ {
+			puzzle.Grid[x] = make([]int, puzzle.ColCount)
+			for y := 0; y < puzzle.ColCount; y++ {
+				puzzle.Grid[x][y] = UNKNOWN
 			}
 		}
 	}
@@ -50,10 +52,10 @@ func (puzzle *PuzzleStruct) Initialise(filePath string) error {
 	}
 	numberOfDigits := len(strconv.Itoa(largestColClueNum))
 	puzzle.DisplayPadding = -(numberOfDigits + 1)
-	return err
+	return puzzle, err
 }
 
-func (puzzle *PuzzleStruct) Dump() string {
+func (puzzle *Puzzle) Dump() string {
 	output := color.YellowString(puzzle.Title)
 	output += "\n"
 	for j := 0; j < puzzle.ColCount; j++ {
@@ -71,13 +73,13 @@ func (puzzle *PuzzleStruct) Dump() string {
 		output += "\n"
 	}
 	for i := 0; i < puzzle.RowCount; i++ {
-		output += displayLine(NewLine(ROW, i), true)
+		output += displayLine(NewLine(puzzle, ROW, i), true)
 		output += "\n"
 	}
 	return output
 }
 
-func (puzzle *PuzzleStruct) maxColClueLength() int {
+func (puzzle *Puzzle) maxColClueLength() int {
 	maxLength := 0
 	for _, clue := range puzzle.ColClueData {
 		if len(clue) > maxLength {
