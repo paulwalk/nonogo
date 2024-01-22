@@ -34,6 +34,6 @@ func displayLine(line *Line, displayClues bool) string {
 		lineString += " "
 		lineString += strings.Join(clueString, ",")
 	}
-	lineString += color.YellowString(" %v", line.Index)
+	lineString += color.YellowString(" %v", line.Index+1)
 	return lineString
 }

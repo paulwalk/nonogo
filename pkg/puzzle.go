@@ -59,7 +59,7 @@ func NewPuzzle(filePath string) (Puzzle, error) {
 func (puzzle *Puzzle) Dump() string {
 	output := color.YellowString(puzzle.Title)
 	output += "\n"
-	for j := 0; j < puzzle.ColCount; j++ {
+	for j := 1; j <= puzzle.ColCount; j++ {
 		output += color.YellowString("%*v", puzzle.DisplayPadding, strconv.Itoa(j))
 	}
 	output += "\n"
