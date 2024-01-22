@@ -18,7 +18,6 @@ func displayCell(cellValue, displayPadding int) string {
 		//displayCharacter = "∙"
 		displayCharacter = " "
 	}
-	//return fmt.Sprintf("%*v", Puzzle.DisplayPadding, displayCharacter)
 	return color.BlueString("%*v", displayPadding, displayCharacter)
 }
 
