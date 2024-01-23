@@ -12,11 +12,11 @@ type PuzzleSolver struct {
 
 var log *zap.SugaredLogger
 
-func NewPuzzleSolver(puzzleFilePath string, logger *zap.SugaredLogger) (PuzzleSolver, error) {
+func NewPuzzleSolver(puzzleFilePath string, displayClues, displayRowAndColNumbers bool, logger *zap.SugaredLogger) (PuzzleSolver, error) {
 	var err error
 	log = logger
 	puzzleSolver := PuzzleSolver{}
-	puzzle, err := NewPuzzle(puzzleFilePath)
+	puzzle, err := NewPuzzle(puzzleFilePath, displayClues, displayRowAndColNumbers)
 	if err != nil {
 		log.Error(err.Error())
 		return puzzleSolver, err

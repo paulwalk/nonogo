@@ -5,8 +5,8 @@ import (
 	"strconv"
 )
 
-func getCellSlice(value, count int) []int {
-	s := make([]int, 0)
+func getCellSlice(value Cell, count int) []Cell {
+	s := make([]Cell, 0)
 	for i := 0; i < count; i++ {
 		s = append(s, value)
 	}

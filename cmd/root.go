@@ -7,7 +7,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var debug bool
+var debug, displayClues, displayRowAndColNumbers bool
+
 var puzzleFilePath string
 var log *zap.SugaredLogger
 
@@ -27,6 +28,8 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&debug, "debug", "", false, "--debug=true|false")
+	rootCmd.PersistentFlags().BoolVarP(&displayClues, "displayClues", "", true, "--displayClues=true|false")
+	rootCmd.PersistentFlags().BoolVarP(&displayRowAndColNumbers, "displayRowAndColNumbers", "", true, "--displayRowAndColNumbers=true|false")
 	rootCmd.PersistentFlags().StringVarP(&puzzleFilePath, "puzzle", "", "", "--puzzle=path-to-puzzle-file")
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	rootCmd.AddCommand(solveCmd)

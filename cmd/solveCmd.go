@@ -18,7 +18,7 @@ var solveCmd = &cobra.Command{
 func solve() {
 	start := time.Now()
 	log.Info("Solve starting...")
-	puzzleSolver, err := NewPuzzleSolver(puzzleFilePath, log)
+	puzzleSolver, err := NewPuzzleSolver(puzzleFilePath, displayClues, displayRowAndColNumbers, log)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

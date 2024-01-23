@@ -8,22 +8,20 @@ import (
 	"strconv"
 )
 
-const UNKNOWN = int(0)
-const SPACE = int(1)
-const BLOCK = int(2)
-
 type Puzzle struct {
-	Title          string  `yaml:"title"`
-	Author         string  `yaml:"author"`
-	RowClueData    [][]int `yaml:"rows"`
-	ColClueData    [][]int `yaml:"columns"`
-	Grid           [][]int `yaml:"-"`
-	ColCount       int     `yaml:"-"`
-	RowCount       int     `yaml:"-"`
-	DisplayPadding int
+	Title                   string   `yaml:"title"`
+	Author                  string   `yaml:"author"`
+	RowClueData             [][]int  `yaml:"rows"`
+	ColClueData             [][]int  `yaml:"columns"`
+	Grid                    [][]Cell `yaml:"-"`
+	ColCount                int      `yaml:"-"`
+	RowCount                int      `yaml:"-"`
+	PaddingForDisplay       int
+	DisplayClues            bool
+	DisplayRowAndColNumbers bool
 }
 
-func NewPuzzle(filePath string) (Puzzle, error) {
+func NewPuzzle(filePath string, displayClues, displayRowAndColNumbers bool) (Puzzle, error) {
 	var err error
 	puzzle := Puzzle{}
 	puzzleData, err := os.ReadFile(filePath)
@@ -36,9 +34,11 @@ func NewPuzzle(filePath string) (Puzzle, error) {
 	}
 	puzzle.RowCount = len(puzzle.RowClueData)
 	puzzle.ColCount = len(puzzle.ColClueData)
-	puzzle.Grid = make([][]int, puzzle.RowCount)
+	puzzle.Grid = make([][]Cell, puzzle.RowCount)
+	puzzle.DisplayClues = displayClues
+	puzzle.DisplayRowAndColNumbers = displayRowAndColNumbers
 	for x := 0; x < puzzle.RowCount; x++ {
-		puzzle.Grid[x] = make([]int, puzzle.ColCount)
+		puzzle.Grid[x] = make([]Cell, puzzle.ColCount)
 		for y := 0; y < puzzle.ColCount; y++ {
 			puzzle.Grid[x][y] = UNKNOWN
 		}
@@ -52,29 +52,34 @@ func NewPuzzle(filePath string) (Puzzle, error) {
 		}
 	}
 	numberOfDigits := len(strconv.Itoa(largestColClueNum))
-	puzzle.DisplayPadding = -(numberOfDigits + 1)
+	puzzle.PaddingForDisplay = -(numberOfDigits + 1)
 	return puzzle, err
 }
 
 func (puzzle *Puzzle) Dump() string {
 	output := color.YellowString(puzzle.Title)
 	output += "\n"
-	for j := 1; j <= puzzle.ColCount; j++ {
-		output += color.YellowString("%*v", puzzle.DisplayPadding, strconv.Itoa(j))
-	}
-	output += "\n"
-	for i := 0; i < puzzle.maxColClueLength(); i++ {
-		for _, clue := range puzzle.ColClueData {
-			if len(clue) >= (i + 1) {
-				output += fmt.Sprintf("%*v", puzzle.DisplayPadding, strconv.Itoa(clue[i]))
-			} else {
-				output += fmt.Sprintf("%*v", puzzle.DisplayPadding, " ")
-			}
+	if puzzle.DisplayRowAndColNumbers {
+		for j := 1; j <= puzzle.ColCount; j++ {
+			output += color.YellowString("%*v", puzzle.PaddingForDisplay, strconv.Itoa(j))
 		}
 		output += "\n"
 	}
+	if puzzle.DisplayClues {
+		for i := 0; i < puzzle.maxColClueLength(); i++ {
+			for _, clue := range puzzle.ColClueData {
+				if len(clue) >= (i + 1) {
+					output += fmt.Sprintf("%*v", puzzle.PaddingForDisplay, strconv.Itoa(clue[i]))
+				} else {
+					output += fmt.Sprintf("%*v", puzzle.PaddingForDisplay, " ")
+				}
+			}
+			output += "\n"
+		}
+	}
 	for i := 0; i < puzzle.RowCount; i++ {
-		output += displayLine(NewLine(puzzle, ROW, i), true)
+		line := NewLine(puzzle, ROW, i)
+		output += line.displayString(puzzle.DisplayClues, puzzle.DisplayRowAndColNumbers)
 		output += "\n"
 	}
 	return output
