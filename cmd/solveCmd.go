@@ -28,6 +28,7 @@ func solve() {
 	unsolvedLines := len(puzzleSolver.Heap.Lines)
 	log.Info(fmt.Sprintf("Iterations = %v", iterations))
 	log.Info(fmt.Sprintf("Execution took %s", elapsedTime))
+	log.Debugf("Cell padding for display = %v", puzzleSolver.Puzzle.PaddingForDisplay)
 	if unsolvedLines > 0 {
 		log.Info("Failed to solve puzzle")
 		log.Info(fmt.Sprintf("Unsolved lines = %v out of %v", unsolvedLines, puzzleSolver.Puzzle.ColCount+puzzleSolver.Puzzle.RowCount))

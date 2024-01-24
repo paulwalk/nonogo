@@ -14,11 +14,11 @@ func NewLineHeap(puzzle *Puzzle) LineHeap {
 	heap.Lines = make(map[string]*Line)
 	log.Debugf("Puzzle rows - %v", puzzle.RowCount)
 	for i := 0; i < puzzle.RowCount; i++ {
-		line := NewLine(puzzle, ROW, i)
+		line := NewLine(puzzle, Row, i)
 		heap.Lines[line.Label()] = line
 	}
 	for i := 0; i < puzzle.ColCount; i++ {
-		line := NewLine(puzzle, COL, i)
+		line := NewLine(puzzle, Col, i)
 		heap.Lines[line.Label()] = line
 	}
 	heap.LineLabels = make([]string, 0, len(heap.Lines))

@@ -40,7 +40,7 @@ func NewPuzzle(filePath string, displayClues, displayRowAndColNumbers bool) (Puz
 	for x := 0; x < puzzle.RowCount; x++ {
 		puzzle.Grid[x] = make([]Cell, puzzle.ColCount)
 		for y := 0; y < puzzle.ColCount; y++ {
-			puzzle.Grid[x][y] = UNKNOWN
+			puzzle.Grid[x][y] = Unknown
 		}
 	}
 	largestColClueNum := 0
@@ -78,7 +78,7 @@ func (puzzle *Puzzle) Dump() string {
 		}
 	}
 	for i := 0; i < puzzle.RowCount; i++ {
-		line := NewLine(puzzle, ROW, i)
+		line := NewLine(puzzle, Row, i)
 		output += line.displayString(puzzle.DisplayClues, puzzle.DisplayRowAndColNumbers)
 		output += "\n"
 	}

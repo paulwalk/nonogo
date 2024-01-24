@@ -17,7 +17,7 @@ func NewLine(puzzle *Puzzle, axis, index int) *Line {
 	line.Axis = axis
 	line.Index = index
 	line.Puzzle = puzzle
-	if axis == ROW {
+	if axis == Row {
 		line.Length = puzzle.ColCount
 	} else {
 		line.Length = puzzle.RowCount
@@ -27,16 +27,16 @@ func NewLine(puzzle *Puzzle, axis, index int) *Line {
 }
 
 func (line *Line) Label() string {
-	if line.Axis == ROW {
-		return "ROW " + strconv.Itoa((line.Index)+1)
+	if line.Axis == Row {
+		return "Row " + strconv.Itoa((line.Index)+1)
 	} else {
-		return "COL " + strconv.Itoa((line.Index)+1)
+		return "Col " + strconv.Itoa((line.Index)+1)
 	}
 }
 
 func (line *Line) Cells() []*Cell {
 	var cells []*Cell
-	if line.Axis == ROW {
+	if line.Axis == Row {
 		cells = make([]*Cell, 0)
 		for i := 0; i < line.Puzzle.ColCount; i++ {
 			cells = append(cells, &line.Puzzle.Grid[line.Index][i])
@@ -51,7 +51,7 @@ func (line *Line) Cells() []*Cell {
 }
 
 func (line *Line) Clue() []int {
-	if line.Axis == ROW {
+	if line.Axis == Row {
 		return line.Puzzle.RowClueData[line.Index]
 	} else {
 		return line.Puzzle.ColClueData[line.Index]
@@ -83,16 +83,16 @@ func (line *Line) processIfSolved() bool {
 func populatePotentialSolutions(clues []int, length int) [][]Cell {
 	if len(clues) == 0 {
 		solutions := make([][]Cell, 0)
-		return append(solutions, getCellSlice(SPACE, length))
+		return append(solutions, getCellSlice(Space, length))
 	} else {
 		starts := length - clues[0]
 		if len(clues) == 1 {
 			solutions := make([][]Cell, 0)
 			for i := 0; i <= starts; i++ {
 				solution := make([]Cell, 0)
-				solution = append(solution, getCellSlice(SPACE, i)...)
-				solution = append(solution, getCellSlice(BLOCK, clues[0])...)
-				solution = append(solution, getCellSlice(SPACE, starts-i)...)
+				solution = append(solution, getCellSlice(Space, i)...)
+				solution = append(solution, getCellSlice(Block, clues[0])...)
+				solution = append(solution, getCellSlice(Space, starts-i)...)
 				solutions = append(solutions, solution)
 			}
 			return solutions
@@ -101,9 +101,9 @@ func populatePotentialSolutions(clues []int, length int) [][]Cell {
 			for i := 0; i < length-clues[0]; i++ {
 				for _, j := range populatePotentialSolutions(clues[1:], starts-i-1) {
 					solution := make([]Cell, 0)
-					solution = append(solution, getCellSlice(SPACE, i)...)
-					solution = append(solution, getCellSlice(BLOCK, clues[0])...)
-					solution = append(solution, SPACE)
+					solution = append(solution, getCellSlice(Space, i)...)
+					solution = append(solution, getCellSlice(Block, clues[0])...)
+					solution = append(solution, Space)
 					solution = append(solution, j...)
 					solutions = append(solutions, solution)
 				}

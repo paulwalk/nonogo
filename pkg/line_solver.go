@@ -14,27 +14,27 @@ func findCellsWhichAreSameInAllPotentialSolutions(line *Line) bool {
 	log.Debug("Finding cells which are blocks/spaces in all potential solutions....")
 	progressWasMade := false
 	for cellIndex, cell := range line.Cells() {
-		if *cell == UNKNOWN {
+		if *cell == Unknown {
 			foundNonBlockCell := false
 			for _, solution := range line.PotentialSolutions {
-				if solution[cellIndex] != BLOCK {
+				if solution[cellIndex] != Block {
 					foundNonBlockCell = true
 					break
 				}
 			}
 			if foundNonBlockCell == false {
-				line.setCell(cellIndex, BLOCK)
+				line.setCell(cellIndex, Block)
 				progressWasMade = true
 			} else {
 				foundNonSpaceCell := false
 				for _, solution := range line.PotentialSolutions {
-					if solution[cellIndex] != SPACE {
+					if solution[cellIndex] != Space {
 						foundNonSpaceCell = true
 						break
 					}
 				}
 				if foundNonSpaceCell == false {
-					line.setCell(cellIndex, SPACE)
+					line.setCell(cellIndex, Space)
 					progressWasMade = true
 				}
 			}
@@ -47,7 +47,7 @@ func removeSolutionsWhichDoNotFitKnownCells(line *Line) bool {
 	log.Debug("Finding solutions which do not fit known cells....")
 	progressWasMade := false
 	for cellIndex, cell := range line.Cells() {
-		if *cell != UNKNOWN {
+		if *cell != Unknown {
 			solutionIndex := 0 // output index
 			for _, solution := range line.PotentialSolutions {
 				if solution[cellIndex] == *cell {
