@@ -68,7 +68,7 @@ func (puzzle *Puzzle) Dump() string {
 	if puzzle.DisplayClues {
 		for i := 0; i < puzzle.maxColClueLength(); i++ {
 			for _, clue := range puzzle.ColClueData {
-				if len(clue) >= (i + 1) {
+				if len(clue) > i {
 					output += fmt.Sprintf("%*v", puzzle.PaddingForDisplay, strconv.Itoa(clue[i]))
 				} else {
 					output += fmt.Sprintf("%*v", puzzle.PaddingForDisplay, " ")
